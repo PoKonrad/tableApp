@@ -1,15 +1,17 @@
-import React from "react";
-import logo from "./logo.svg";
-import { Counter } from "./features/counter/Counter";
 import "./App.css";
-import { TextField } from "@mui/material";
-import ProductsTable from "./components/ProductsTable";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Index from "./views/Index";
 
 function App() {
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <Index />,
+    },
+  ]);
   return (
     <div className="App">
-      <TextField type="number" label="ID Filter" />
-      <ProductsTable />
+      <RouterProvider router={router} />
     </div>
   );
 }
