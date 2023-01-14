@@ -1,4 +1,4 @@
-export interface Data {
+export interface ApiProduct {
   id: number;
   name: string;
   year: number;
@@ -16,6 +16,6 @@ export interface ApiResp {
   per_page: number;
   total: number;
   total_pages: number;
-  data: Data[] | Data;
+  data: ApiProduct[] | ApiProduct;
   support: Support;
 }

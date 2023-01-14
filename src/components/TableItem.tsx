@@ -8,6 +8,9 @@ import {
   Typography,
 } from "@mui/material";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { showModal } from "../features/modal/modalSlice";
+import { ApiProduct } from "../types/apiResp";
 
 type TableItemProps = {
   tableItem: {
@@ -19,68 +22,13 @@ type TableItemProps = {
   };
 };
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 300,
-  bgcolor: "background.paper",
-  p: 4,
-};
-
 const TableItem: React.FC<TableItemProps> = ({ tableItem }) => {
-  const [modalOpen, setModalOpen] = useState(false);
+  const dispatch = useDispatch();
   return (
-    <>
-      <Modal open={modalOpen} onClose={() => setModalOpen(false)}>
-        <Box sx={style}>
-          <Grid container item direction="column">
-            <Grid container direction="row" justifyContent="space-between">
-              <Grid item>
-                <Typography>ID</Typography>
-              </Grid>
-              <Grid item>
-                <Typography>{tableItem.id}</Typography>
-              </Grid>
-            </Grid>
-            <Grid container direction="row" justifyContent="space-between">
-              <Grid item>
-                <Typography>NAME</Typography>
-              </Grid>
-              <Grid item>
-                <Typography>{tableItem.name}</Typography>
-              </Grid>
-            </Grid>
-            <Grid container direction="row" justifyContent="space-between">
-              <Grid item>
-                <Typography>COLOR</Typography>
-              </Grid>
-              <Grid item>
-                <Typography>{tableItem.color}</Typography>
-              </Grid>
-            </Grid>
-            <Grid container direction="row" justifyContent="space-between">
-              <Grid item>
-                <Typography>YEAR</Typography>
-              </Grid>
-              <Grid item>
-                <Typography>{tableItem.year}</Typography>
-              </Grid>
-            </Grid>
-            <Grid container direction="row" justifyContent="space-between">
-              <Grid item>
-                <Typography>PANTONE VALUE</Typography>
-              </Grid>
-              <Grid item>
-                <Typography>{tableItem.pantone_value}</Typography>
-              </Grid>
-            </Grid>
-          </Grid>
-        </Box>
-      </Modal>
+    <tbody>
       <TableRow
-        onClick={() => setModalOpen(true)}
+        data-testid="tableRow"
+        onClick={() => dispatch(showModal(tableItem))}
         sx={{
           backgroundColor: tableItem.color,
         }}
@@ -89,7 +37,7 @@ const TableItem: React.FC<TableItemProps> = ({ tableItem }) => {
         <TableCell>{tableItem.name}</TableCell>
         <TableCell>{tableItem.year}</TableCell>
       </TableRow>
-    </>
+    </tbody>
   );
 };
 
