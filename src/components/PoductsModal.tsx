@@ -1,24 +1,26 @@
-import { Modal, Box, Grid, Typography } from "@mui/material";
+import {
+  Grid,
+  Typography,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+} from "@mui/material";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { hideModal, modalStateSelector } from "../features/modal/modalSlice";
-
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 300,
-  bgcolor: "background.paper",
-  p: 4,
-};
 
 const PoductsModal: React.FC = () => {
   const modalState = useSelector(modalStateSelector);
   const dispatch = useDispatch();
   return (
-    <Modal open={modalState.isShown} onClose={() => dispatch(hideModal())}>
-      <Box sx={style}>
+    <Dialog
+      open={modalState.isShown}
+      onClose={() => dispatch(hideModal())}
+      maxWidth="xs"
+      fullWidth
+    >
+      <DialogTitle>Item Details</DialogTitle>
+      <DialogContent>
         <Grid container item direction="column">
           <Grid container direction="row" justifyContent="space-between">
             <Grid item>
@@ -61,8 +63,8 @@ const PoductsModal: React.FC = () => {
             </Grid>
           </Grid>
         </Grid>
-      </Box>
-    </Modal>
+      </DialogContent>
+    </Dialog>
   );
 };
 
