@@ -1,16 +1,6 @@
-import {
-  Box,
-  Grid,
-  Modal,
-  Paper,
-  TableCell,
-  TableRow,
-  Typography,
-} from "@mui/material";
-import { useState } from "react";
+import { TableCell, TableRow, Typography } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { showModal } from "../features/modal/modalSlice";
-import { ApiProduct } from "../types/apiResp";
 
 type TableItemProps = {
   tableItem: {
@@ -25,19 +15,23 @@ type TableItemProps = {
 const TableItem: React.FC<TableItemProps> = ({ tableItem }) => {
   const dispatch = useDispatch();
   return (
-    <tbody>
-      <TableRow
-        data-testid="tableRow"
-        onClick={() => dispatch(showModal(tableItem))}
-        sx={{
-          backgroundColor: tableItem.color,
-        }}
-      >
-        <TableCell>{tableItem.id}</TableCell>
-        <TableCell>{tableItem.name}</TableCell>
-        <TableCell>{tableItem.year}</TableCell>
-      </TableRow>
-    </tbody>
+    <TableRow
+      data-testid="tableRow"
+      onClick={() => dispatch(showModal(tableItem))}
+      sx={{
+        backgroundColor: tableItem.color,
+      }}
+    >
+      <TableCell align="center">
+        <Typography minWidth="3rem">{tableItem.id}</Typography>
+      </TableCell>
+      <TableCell align="center">
+        <Typography minWidth="15rem">{tableItem.name}</Typography>
+      </TableCell>
+      <TableCell align="center">
+        <Typography minWidth="4rem">{tableItem.year}</Typography>
+      </TableCell>
+    </TableRow>
   );
 };
 
