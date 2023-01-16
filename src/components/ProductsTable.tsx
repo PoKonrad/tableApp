@@ -11,94 +11,119 @@ import {
   TextField,
   Alert,
   AlertTitle,
-  LinearProgress,
-  Fade,
+  Skeleton,
+  TableBody,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
+import React from "react";
 import { useQuery } from "react-query";
 import TableItem from "./TableItem";
 import type { ApiResp } from "../types/apiResp";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
+import useUrl from "../hooks/useUrl";
+import axios from "axios";
 
 const ProductsTable = () => {
-  const [currentPage, setCurrentPage] = useState(0);
-  const [idFilter, setIdFilter] = useState<string>();
-  let { current_page, id } = useParams();
-  let [searchParams, setSearchParams] = useSearchParams({
-    uwu: "uwu",
-    nice: "a",
-  });
+  const [params] = useSearchParams();
+  const [currentPage, setCurrentPage] = useState(
+    parseInt(params.get("page") || "0")
+  );
+  const [idFilter, setIdFilter] = useState<string>(params.get("id") || "");
+  useUrl(idFilter, currentPage);
 
+  // Handle Fetch
   const { data, error, isError, isLoading } = useQuery<ApiResp, Error>(
     ["/products", currentPage, idFilter],
     async (): Promise<ApiResp> => {
       const params = new URLSearchParams({
         per_page: "5",
-        page: currentPage + "1",
+        page: (currentPage + 1).toString(),
       });
 
       if (idFilter) {
         params.append("id", idFilter);
       }
 
-      const resp = await fetch(
-        `https://reqres.in/api/products?${params.toString()}`
-      );
-
-      if (!resp.ok) {
-        throw new Error(resp.status.toString());
-      }
-      const respJson = await resp.json();
-
-      return respJson;
+      const resp = await axios.get(`https://reqres.in/api/products`, {
+        params,
+      });
+      return resp.data;
     }
   );
+
+  // Remove any characters that are not numbers
+  // because firefox has poor type="number" support.
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const result = e.target.value.replace(/\D/g, "");
+
+    setIdFilter(result);
+  };
+
   return (
-    <TableContainer component={Paper}>
-      <Fade in={isLoading}>
-        <LinearProgress />
-      </Fade>
-      <Fade in={isError}>
-        <Alert severity="error">
-          <AlertTitle>An Error has occured</AlertTitle>
-          Error Code: {error?.message}
-        </Alert>
-      </Fade>
+    <TableContainer
+      component={Paper}
+      sx={{
+        mt: 2,
+        paddingTop: 1,
+      }}
+    >
       <TextField
-        type="number"
         label="ID Filter"
-        onChange={(e) => setIdFilter(e.target.value)}
+        onChange={handleInputChange}
+        value={idFilter}
       />
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>
-              <Typography>ID</Typography>
+            <TableCell align="center">
+              <Typography minWidth="3rem">ID</Typography>
             </TableCell>
-            <TableCell>
+            <TableCell align="center">
               <Typography>NAME</Typography>
             </TableCell>
-            <TableCell>
+            <TableCell align="center">
               <Typography>YEAR</Typography>
             </TableCell>
           </TableRow>
         </TableHead>
-        {isLoading || isError ? null : Array.isArray(data?.data) ? (
-          data?.data.map((el) => <TableItem tableItem={el} key={el.id} />)
-        ) : (
-          <TableItem tableItem={data!.data} />
-        )}
+        <TableBody>
+          {isError ? (
+            <TableRow>
+              <TableCell colSpan={4}>
+                <Alert severity="error">
+                  <AlertTitle>An Error has occured</AlertTitle>
+                  Error Code: {error?.message}
+                </Alert>
+              </TableCell>
+            </TableRow>
+          ) : null}
+
+          {isLoading ? (
+            <TableRow>
+              <TableCell align="center" colSpan={3}>
+                <Skeleton />
+              </TableCell>
+            </TableRow>
+          ) : null}
+
+          {isLoading || isError ? null : Array.isArray(data?.data) ? (
+            data?.data.map((el) => <TableItem tableItem={el} key={el.id} />)
+          ) : (
+            <TableItem tableItem={data!.data} />
+          )}
+        </TableBody>
         <TableFooter>
-          <TablePagination
-            count={data?.total || 0}
-            page={currentPage}
-            rowsPerPage={data?.per_page || 0}
-            rowsPerPageOptions={[data?.per_page || 1]}
-            onPageChange={(e, newValue) => {
-              setCurrentPage(newValue);
-              console.log(newValue);
-            }}
-          />
+          <TableRow>
+            <TablePagination
+              count={data?.total || 0}
+              page={currentPage}
+              rowsPerPage={data?.per_page || 0}
+              rowsPerPageOptions={[data?.per_page || 1]}
+              onPageChange={(e, newValue) => {
+                setCurrentPage(newValue);
+              }}
+            />
+          </TableRow>
         </TableFooter>
       </Table>
     </TableContainer>
