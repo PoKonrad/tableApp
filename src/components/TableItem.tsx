@@ -19,9 +19,9 @@ const TableItem: React.FC<TableItemProps> = ({ tableItem }) => {
       data-testid="tableRow"
       onClick={() => dispatch(showModal(tableItem))}
       sx={{
-        backgroundColor: tableItem.color
-      }}
-    >
+        backgroundColor: tableItem.color,
+        cursor: 'pointer'
+      }}>
       <TableCell align="center">
         <Typography minWidth="3rem">{tableItem.id}</Typography>
       </TableCell>
