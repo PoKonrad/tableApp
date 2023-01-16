@@ -16,12 +16,10 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import React from "react";
-import { useQuery } from "react-query";
 import TableItem from "./TableItem";
-import type { ApiResp } from "../types/apiResp";
 import { useSearchParams } from "react-router-dom";
 import useUrl from "../hooks/useUrl";
-import axios from "axios";
+import useApi from "../hooks/useApi";
 
 const ProductsTable = () => {
   const [params] = useSearchParams();
@@ -31,31 +29,13 @@ const ProductsTable = () => {
   const [idFilter, setIdFilter] = useState<string>(params.get("id") || "");
   useUrl(idFilter, currentPage);
 
-  // Handle Fetch
-  const { data, error, isError, isLoading } = useQuery<ApiResp, Error>(
-    ["/products", currentPage, idFilter],
-    async (): Promise<ApiResp> => {
-      const params = new URLSearchParams({
-        per_page: "5",
-        page: (currentPage + 1).toString(),
-      });
-
-      if (idFilter) {
-        params.append("id", idFilter);
-      }
-
-      const resp = await axios.get(`https://reqres.in/api/products`, {
-        params,
-      });
-      return resp.data;
-    }
-  );
+  const { data, error, isError, isLoading } = useApi(currentPage, idFilter);
+  console.log(error);
 
   // Remove any characters that are not numbers
   // because firefox has poor type="number" support.
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const result = e.target.value.replace(/\D/g, "");
-
     setIdFilter(result);
   };
 
@@ -65,6 +45,8 @@ const ProductsTable = () => {
       sx={{
         mt: 2,
         paddingTop: 1,
+        display: "flex",
+        flexDirection: "column",
       }}
     >
       <TextField
@@ -92,7 +74,7 @@ const ProductsTable = () => {
               <TableCell colSpan={4}>
                 <Alert severity="error">
                   <AlertTitle>An Error has occured</AlertTitle>
-                  Error Code: {error?.message}
+                  {error?.message}
                 </Alert>
               </TableCell>
             </TableRow>
