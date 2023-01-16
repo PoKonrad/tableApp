@@ -12,7 +12,8 @@ import {
   Alert,
   AlertTitle,
   Skeleton,
-  TableBody
+  TableBody,
+  Collapse
 } from '@mui/material';
 import { useState } from 'react';
 import React from 'react';
@@ -30,6 +31,9 @@ const ProductsTable = () => {
   const { data, error, isError, isLoading } = useApi(currentPage, idFilter);
   console.log(error);
 
+  const emptyRows = Array.isArray(data?.data) ? Math.max(0, 5 - (data?.data?.length || 0)) : 4;
+
+  console.log(emptyRows);
   // Remove any characters that are not numbers
   // because firefox has poor type="number" support.
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,8 +49,7 @@ const ProductsTable = () => {
         paddingTop: 1,
         display: 'flex',
         flexDirection: 'column'
-      }}
-    >
+      }}>
       <TextField label="ID Filter" onChange={handleInputChange} value={idFilter} />
       <Table>
         <TableHead>
@@ -62,20 +65,16 @@ const ProductsTable = () => {
             </TableCell>
           </TableRow>
         </TableHead>
-        <TableBody>
-          {isError ? (
-            <TableRow>
-              <TableCell colSpan={4}>
-                <Alert severity="error">
-                  <AlertTitle>An Error has occured</AlertTitle>
-                  {error?.message}
-                </Alert>
-              </TableCell>
-            </TableRow>
-          ) : null}
-
+        <TableBody
+          sx={{
+            height: 285
+          }}>
           {isLoading ? (
-            <TableRow>
+            <TableRow
+              sx={{
+                height: 57,
+                boxSizing: 'border-box'
+              }}>
               <TableCell align="center" colSpan={3}>
                 <Skeleton />
               </TableCell>
@@ -86,6 +85,12 @@ const ProductsTable = () => {
             data?.data.map((el) => <TableItem tableItem={el} key={el.id} />)
           ) : (
             <TableItem tableItem={data!.data} />
+          )}
+
+          {emptyRows > 0 && (
+            <TableRow style={{ height: 57 * emptyRows }}>
+              <TableCell colSpan={3} />
+            </TableRow>
           )}
         </TableBody>
         <TableFooter>
@@ -99,6 +104,20 @@ const ProductsTable = () => {
                 setCurrentPage(newValue);
               }}
             />
+          </TableRow>
+          <TableRow>
+            <TableCell
+              colSpan={3}
+              sx={{
+                padding: 0
+              }}>
+              <Collapse in={isError} unmountOnExit>
+                <Alert severity="error">
+                  <AlertTitle>An Error has occured</AlertTitle>
+                  {error?.message}
+                </Alert>
+              </Collapse>
+            </TableCell>
           </TableRow>
         </TableFooter>
       </Table>
