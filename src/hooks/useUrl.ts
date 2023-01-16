@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const useUrl = (idFilter: string | undefined, currentPage: number) => {
   const navigate = useNavigate();
@@ -7,14 +7,14 @@ const useUrl = (idFilter: string | undefined, currentPage: number) => {
   useEffect(() => {
     const params = new URLSearchParams();
     if (idFilter) {
-      params.append("id", idFilter);
+      params.append('id', idFilter);
     } else {
-      params.append("page", currentPage.toString());
+      params.append('page', currentPage.toString());
     }
     navigate(
       {
-        pathname: "/",
-        search: `?${params}`,
+        pathname: '/',
+        search: `?${params}`
       },
       { replace: true }
     );

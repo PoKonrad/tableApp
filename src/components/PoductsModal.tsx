@@ -1,24 +1,13 @@
-import {
-  Grid,
-  Typography,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-} from "@mui/material";
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { hideModal, modalStateSelector } from "../features/modal/modalSlice";
+import { Grid, Typography, Dialog, DialogTitle, DialogContent } from '@mui/material';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { hideModal, modalStateSelector } from '../features/modal/modalSlice';
 
 const PoductsModal: React.FC = () => {
   const modalState = useSelector(modalStateSelector);
   const dispatch = useDispatch();
   return (
-    <Dialog
-      open={modalState.isShown}
-      onClose={() => dispatch(hideModal())}
-      maxWidth="xs"
-      fullWidth
-    >
+    <Dialog open={modalState.isShown} onClose={() => dispatch(hideModal())} maxWidth="xs" fullWidth>
       <DialogTitle>Item Details</DialogTitle>
       <DialogContent>
         <Grid container item direction="column">

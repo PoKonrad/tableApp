@@ -1,6 +1,6 @@
-import { TableCell, TableRow, Typography } from "@mui/material";
-import { useDispatch } from "react-redux";
-import { showModal } from "../features/modal/modalSlice";
+import { TableCell, TableRow, Typography } from '@mui/material';
+import { useDispatch } from 'react-redux';
+import { showModal } from '../features/modal/modalSlice';
 
 type TableItemProps = {
   tableItem: {
@@ -19,7 +19,7 @@ const TableItem: React.FC<TableItemProps> = ({ tableItem }) => {
       data-testid="tableRow"
       onClick={() => dispatch(showModal(tableItem))}
       sx={{
-        backgroundColor: tableItem.color,
+        backgroundColor: tableItem.color
       }}
     >
       <TableCell align="center">

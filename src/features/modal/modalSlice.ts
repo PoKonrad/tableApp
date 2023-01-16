@@ -1,6 +1,6 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "../../app/store";
-import { ApiProduct } from "../../types/apiResp";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { RootState } from '../../app/store';
+import { ApiProduct } from '../../types/apiResp';
 
 interface ModalState {
   isShown: boolean;
@@ -11,15 +11,15 @@ const initialState: ModalState = {
   isShown: false,
   modalData: {
     id: 0,
-    name: "",
+    name: '',
     year: 0,
-    color: "",
-    pantone_value: "",
-  },
+    color: '',
+    pantone_value: ''
+  }
 };
 
 export const modalSlice = createSlice({
-  name: "modalState",
+  name: 'modalState',
   initialState,
   reducers: {
     showModal: (state, action: PayloadAction<ApiProduct>) => {
@@ -28,8 +28,8 @@ export const modalSlice = createSlice({
     },
     hideModal: (state) => {
       state.isShown = false;
-    },
-  },
+    }
+  }
 });
 
 export const { showModal, hideModal } = modalSlice.actions;

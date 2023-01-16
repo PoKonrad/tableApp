@@ -12,21 +12,19 @@ import {
   Alert,
   AlertTitle,
   Skeleton,
-  TableBody,
-} from "@mui/material";
-import { useState } from "react";
-import React from "react";
-import TableItem from "./TableItem";
-import { useSearchParams } from "react-router-dom";
-import useUrl from "../hooks/useUrl";
-import useApi from "../hooks/useApi";
+  TableBody
+} from '@mui/material';
+import { useState } from 'react';
+import React from 'react';
+import TableItem from './TableItem';
+import { useSearchParams } from 'react-router-dom';
+import useUrl from '../hooks/useUrl';
+import useApi from '../hooks/useApi';
 
 const ProductsTable = () => {
   const [params] = useSearchParams();
-  const [currentPage, setCurrentPage] = useState(
-    parseInt(params.get("page") || "0")
-  );
-  const [idFilter, setIdFilter] = useState<string>(params.get("id") || "");
+  const [currentPage, setCurrentPage] = useState(parseInt(params.get('page') || '0'));
+  const [idFilter, setIdFilter] = useState<string>(params.get('id') || '');
   useUrl(idFilter, currentPage);
 
   const { data, error, isError, isLoading } = useApi(currentPage, idFilter);
@@ -35,7 +33,7 @@ const ProductsTable = () => {
   // Remove any characters that are not numbers
   // because firefox has poor type="number" support.
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const result = e.target.value.replace(/\D/g, "");
+    const result = e.target.value.replace(/\D/g, '');
     setIdFilter(result);
   };
 
@@ -45,15 +43,11 @@ const ProductsTable = () => {
       sx={{
         mt: 2,
         paddingTop: 1,
-        display: "flex",
-        flexDirection: "column",
+        display: 'flex',
+        flexDirection: 'column'
       }}
     >
-      <TextField
-        label="ID Filter"
-        onChange={handleInputChange}
-        value={idFilter}
-      />
+      <TextField label="ID Filter" onChange={handleInputChange} value={idFilter} />
       <Table>
         <TableHead>
           <TableRow>

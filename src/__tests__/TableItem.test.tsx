@@ -1,8 +1,8 @@
-import { screen, render } from "@testing-library/react";
-import "@testing-library/jest-dom";
-import TableItem from "../components/TableItem";
-import { Provider } from "react-redux";
-import { store } from "../app/store";
+import { screen, render } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import TableItem from '../components/TableItem';
+import { Provider } from 'react-redux';
+import { store } from '../app/store';
 
 const apiData = JSON.parse(`{
     "id": 1,
@@ -12,8 +12,8 @@ const apiData = JSON.parse(`{
     "pantone_value": "15-4020"
   }`);
 
-describe("ProductsTableItem", () => {
-  it("should render an item", () => {
+describe('ProductsTableItem', () => {
+  it('should render an item', () => {
     render(
       <Provider store={store}>
         <table>
